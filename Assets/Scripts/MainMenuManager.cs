@@ -24,6 +24,9 @@ public class MainMenuManager : MonoBehaviour
         Cursor.visible = true;
         Time.timeScale = 1f;
 
+        GameSettings.InitializeIfNeeded();
+        GameSettings.Apply();
+
         BindUI();
         UpdateDeviceUI();
     }
@@ -76,6 +79,13 @@ public class MainMenuManager : MonoBehaviour
                 {
                     Button btn = playBtn.GetComponent<Button>();
                     BindButton(btn, PlayGame);
+                }
+
+                Transform settingsBtn = menuCard.Find("SettingsButton");
+                if (settingsBtn != null)
+                {
+                    Button btn = settingsBtn.GetComponent<Button>();
+                    BindButton(btn, OpenSettings);
                 }
 
                 Transform deviceBtn = menuCard.Find("DeviceButton");
@@ -155,6 +165,16 @@ public class MainMenuManager : MonoBehaviour
         Time.timeScale = 1f;
         CoinThief.hasReachedCheckpoint1 = false;
         SceneManager.LoadScene("SampleScene");
+    }
+
+    public void OpenSettings()
+    {
+        Canvas canvas = GetComponentInParent<Canvas>();
+        if (canvas == null) canvas = FindObjectOfType<Canvas>();
+        if (canvas != null)
+        {
+            SettingsUIManager.Open(canvas);
+        }
     }
 
     public void QuitGame()

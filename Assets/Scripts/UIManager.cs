@@ -36,6 +36,7 @@ public class UIManager : MonoBehaviour
     private void Start()
     {
         SetupGameOverMainMenuButton();
+        SetupPauseSettingsButton();
     }
 
     private void Update()
@@ -170,6 +171,65 @@ public class UIManager : MonoBehaviour
 
             Image img = menuBtnGO.GetComponent<Image>();
             if (img != null) img.color = new Color(0.3f, 0.3f, 0.35f, 0.95f);
+        }
+    }
+
+    /// <summary>
+    /// Adds a Settings button to PausePanel so players can adjust sensitivity & controls in-game.
+    /// </summary>
+    private void SetupPauseSettingsButton()
+    {
+        if (pausePanel == null) return;
+
+        Button[] buttons = pausePanel.GetComponentsInChildren<Button>(true);
+        foreach (var b in buttons)
+        {
+            if (b.gameObject.name.Contains("Setting")) return;
+        }
+
+        Button resumeBtn = null;
+        Button menuBtn = null;
+        foreach (var b in buttons)
+        {
+            if (b.gameObject.name.Contains("Resume")) resumeBtn = b;
+            if (b.gameObject.name.Contains("Menu")) menuBtn = b;
+        }
+
+        if (resumeBtn != null && menuBtn != null)
+        {
+            GameObject settingsBtnGO = Instantiate(resumeBtn.gameObject, pausePanel.transform);
+            settingsBtnGO.name = "PauseSettingsButton";
+
+            RectTransform resumeRT = resumeBtn.GetComponent<RectTransform>();
+            RectTransform settingsRT = settingsBtnGO.GetComponent<RectTransform>();
+            RectTransform menuRT = menuBtn.GetComponent<RectTransform>();
+
+            if (resumeRT != null && settingsRT != null && menuRT != null)
+            {
+                resumeRT.anchoredPosition = new Vector2(0f, 50f);
+                settingsRT.anchoredPosition = new Vector2(0f, -15f);
+                menuRT.anchoredPosition = new Vector2(0f, -80f);
+            }
+
+            Text btnText = settingsBtnGO.GetComponentInChildren<Text>();
+            if (btnText != null) btnText.text = "⚙  SETTINGS";
+
+            Button btn = settingsBtnGO.GetComponent<Button>();
+            btn.onClick.RemoveAllListeners();
+            btn.onClick.AddListener(OpenSettings);
+
+            Image img = settingsBtnGO.GetComponent<Image>();
+            if (img != null) img.color = new Color(0.15f, 0.35f, 0.55f, 0.95f);
+        }
+    }
+
+    public void OpenSettings()
+    {
+        Canvas canvas = GetComponentInParent<Canvas>();
+        if (canvas == null) canvas = FindObjectOfType<Canvas>();
+        if (canvas != null)
+        {
+            SettingsUIManager.Open(canvas);
         }
     }
 

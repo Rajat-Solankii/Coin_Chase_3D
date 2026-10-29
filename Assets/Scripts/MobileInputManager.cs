@@ -70,6 +70,10 @@ public class MobileInputManager : MonoBehaviour
     private GameObject controlsRoot;
     private RectTransform joystickBackground;
     private RectTransform joystickHandle;
+    private RectTransform jumpButtonRT;
+    private RectTransform sprintButtonRT;
+    private RectTransform pauseButtonRT;
+    private RectTransform cheatButtonRT;
     private Vector2 joystickCenter;
     private int joystickPointerId = -999;
 
@@ -104,6 +108,8 @@ public class MobileInputManager : MonoBehaviour
     {
         // Build or hook up Mobile UI Canvas
         SetupMobileUI();
+        GameSettings.InitializeIfNeeded();
+        GameSettings.Apply();
 
         // Initial visibility
         UpdateControlsVisibility();
@@ -178,6 +184,43 @@ public class MobileInputManager : MonoBehaviour
         if (controlsRoot != null)
         {
             controlsRoot.SetActive(isMobileActive && !IsAnyMenuOpen());
+        }
+    }
+
+    public void ApplySensitivity(float sensi, bool invertY)
+    {
+        lookSensitivityX = sensi;
+        lookSensitivityY = sensi;
+        invertLookY = invertY;
+    }
+
+    public void ApplyControlScale(float joyScale, float btnScale)
+    {
+        if (joystickBackground != null)
+        {
+            joystickBackground.sizeDelta = new Vector2(180f * joyScale, 180f * joyScale);
+            joystickBackground.anchoredPosition = new Vector2(170f * joyScale, 170f * joyScale);
+            joystickRange = 75f * joyScale;
+        }
+        if (joystickHandle != null)
+        {
+            joystickHandle.sizeDelta = new Vector2(75f * joyScale, 75f * joyScale);
+        }
+
+        if (jumpButtonRT != null)
+        {
+            jumpButtonRT.sizeDelta = new Vector2(100f * btnScale, 100f * btnScale);
+            jumpButtonRT.anchoredPosition = new Vector2(-120f * btnScale, 130f * btnScale);
+        }
+        if (sprintButtonRT != null)
+        {
+            sprintButtonRT.sizeDelta = new Vector2(85f * btnScale, 85f * btnScale);
+            sprintButtonRT.anchoredPosition = new Vector2(-235f * btnScale, 105f * btnScale);
+        }
+        if (cheatButtonRT != null)
+        {
+            cheatButtonRT.sizeDelta = new Vector2(145f * btnScale, 50f * btnScale);
+            cheatButtonRT.anchoredPosition = new Vector2(-190f * btnScale, -65f * btnScale);
         }
     }
 
@@ -444,6 +487,7 @@ public class MobileInputManager : MonoBehaviour
         btnGO.transform.SetParent(parent, false);
 
         RectTransform rt = btnGO.AddComponent<RectTransform>();
+        jumpButtonRT = rt;
         rt.anchorMin = new Vector2(1f, 0f);
         rt.anchorMax = new Vector2(1f, 0f);
         rt.pivot = new Vector2(0.5f, 0.5f);
@@ -480,9 +524,11 @@ public class MobileInputManager : MonoBehaviour
         btnGO.transform.SetParent(parent, false);
 
         RectTransform rt = btnGO.AddComponent<RectTransform>();
+        jumpButtonRT = rt;
         rt.anchorMin = new Vector2(1f, 0f);
         rt.anchorMax = new Vector2(1f, 0f);
         rt.pivot = new Vector2(0.5f, 0.5f);
+        sprintButtonRT = rt;
         rt.anchoredPosition = new Vector2(-235f, 105f);
         rt.sizeDelta = new Vector2(85f, 85f);
 
@@ -515,9 +561,11 @@ public class MobileInputManager : MonoBehaviour
         btnGO.transform.SetParent(parent, false);
 
         RectTransform rt = btnGO.AddComponent<RectTransform>();
+        jumpButtonRT = rt;
         rt.anchorMin = new Vector2(1f, 1f);
         rt.anchorMax = new Vector2(1f, 1f);
         rt.pivot = new Vector2(0.5f, 0.5f);
+        pauseButtonRT = rt;
         rt.anchoredPosition = new Vector2(-70f, -65f);
         rt.sizeDelta = new Vector2(65f, 65f);
 
@@ -550,9 +598,11 @@ public class MobileInputManager : MonoBehaviour
         btnGO.transform.SetParent(parent, false);
 
         RectTransform rt = btnGO.AddComponent<RectTransform>();
+        jumpButtonRT = rt;
         rt.anchorMin = new Vector2(1f, 1f);
         rt.anchorMax = new Vector2(1f, 1f);
         rt.pivot = new Vector2(0.5f, 0.5f);
+        cheatButtonRT = rt;
         rt.anchoredPosition = new Vector2(-190f, -65f);
         rt.sizeDelta = new Vector2(145f, 50f);
 

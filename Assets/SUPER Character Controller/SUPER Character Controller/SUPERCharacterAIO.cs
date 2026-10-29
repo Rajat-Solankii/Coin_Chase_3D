@@ -299,6 +299,9 @@ public class SUPERCharacterAIO : MonoBehaviour{
         
         
         #region Camera
+        GameSettings.InitializeIfNeeded();
+        GameSettings.Apply();
+
         maxCameraDistInternal = maxCameraDistance;
         initialCameraFOV = playerCamera.fieldOfView;
         headbobCameraPosition = Vector3.up*standingEyeHeight;

@@ -332,7 +332,7 @@ public static class MainMenuSceneBuilder
         cardRT.anchorMax = new Vector2(0.5f, 0.5f);
         cardRT.pivot = new Vector2(0.5f, 0.5f);
         cardRT.anchoredPosition = new Vector2(0f, 0f);
-        cardRT.sizeDelta = new Vector2(380f, 260f);
+        cardRT.sizeDelta = new Vector2(380f, 320f);
 
         Image cardImg = menuCard.GetComponent<Image>();
         if (cardImg == null) cardImg = menuCard.AddComponent<Image>();
@@ -353,7 +353,8 @@ public static class MainMenuSceneBuilder
             prt.anchorMin = new Vector2(0.5f, 0.5f);
             prt.anchorMax = new Vector2(0.5f, 0.5f);
             prt.pivot = new Vector2(0.5f, 0.5f);
-            prt.anchoredPosition = new Vector2(0f, 56f);
+            prt.anchoredPosition = new Vector2(0f, 92f);
+            prt.sizeDelta = new Vector2(300f, 52f);
             prt.sizeDelta = new Vector2(300f, 58f);
 
             Image pImg = playTrans.GetComponent<Image>();
@@ -379,6 +380,70 @@ public static class MainMenuSceneBuilder
             }
         }
 
+        // Setup SettingsButton
+        Transform settingsTrans = menuCard.transform.Find("SettingsButton");
+        GameObject settingsBtnGO;
+        if (settingsTrans == null)
+        {
+            settingsBtnGO = new GameObject("SettingsButton");
+            settingsBtnGO.transform.SetParent(menuCard.transform, false);
+            settingsBtnGO.AddComponent<RectTransform>();
+            settingsBtnGO.AddComponent<CanvasRenderer>();
+            settingsBtnGO.AddComponent<Image>();
+            settingsBtnGO.AddComponent<Button>();
+            settingsTrans = settingsBtnGO.transform;
+        }
+        else
+        {
+            settingsBtnGO = settingsTrans.gameObject;
+        }
+
+        RectTransform srt = settingsTrans.GetComponent<RectTransform>();
+        srt.anchorMin = new Vector2(0.5f, 0.5f);
+        srt.anchorMax = new Vector2(0.5f, 0.5f);
+        srt.pivot = new Vector2(0.5f, 0.5f);
+        srt.anchoredPosition = new Vector2(0f, 32f);
+        srt.sizeDelta = new Vector2(300f, 48f);
+
+        Image sImg = settingsTrans.GetComponent<Image>();
+        sImg.color = new Color(0.14f, 0.28f, 0.45f, 0.95f);
+
+        Button sBtn = settingsTrans.GetComponent<Button>();
+        ColorBlock scb = sBtn.colors;
+        scb.normalColor = new Color(0.14f, 0.28f, 0.45f, 0.95f);
+        scb.highlightedColor = new Color(0.20f, 0.40f, 0.65f, 1f);
+        scb.pressedColor = new Color(0.10f, 0.20f, 0.32f, 1f);
+        sBtn.colors = scb;
+
+        var sOutline = settingsTrans.GetComponent<Outline>();
+        if (sOutline == null) sOutline = settingsTrans.gameObject.AddComponent<Outline>();
+        sOutline.effectColor = new Color(0.4f, 0.8f, 1f, 0.6f);
+        sOutline.effectDistance = new Vector2(1.5f, -1.5f);
+
+        Text sText = settingsTrans.GetComponentInChildren<Text>();
+        if (sText == null)
+        {
+            GameObject stGO = new GameObject("Text");
+            stGO.transform.SetParent(settingsTrans, false);
+            stGO.AddComponent<RectTransform>();
+            stGO.AddComponent<CanvasRenderer>();
+            sText = stGO.AddComponent<Text>();
+            RectTransform stRT = stGO.GetComponent<RectTransform>();
+            stRT.anchorMin = Vector2.zero; stRT.anchorMax = Vector2.one; stRT.sizeDelta = Vector2.zero;
+        }
+        sText.font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf") ?? Resources.GetBuiltinResource<Font>("Arial.ttf");
+        sText.fontSize = 20;
+        sText.alignment = TextAnchor.MiddleCenter;
+        sText.color = Color.white;
+        sText.supportRichText = true;
+        sText.text = "<b>⚙   SETTINGS</b>";
+
+        if (menuMgr != null)
+        {
+            sBtn.onClick.RemoveAllListeners();
+            UnityEditor.Events.UnityEventTools.AddPersistentListener(sBtn.onClick, menuMgr.OpenSettings);
+        }
+
         // Setup DeviceButton
         Transform deviceTrans = menuCard.transform.Find("DeviceButton");
         GameObject deviceBtnGO;
@@ -401,7 +466,7 @@ public static class MainMenuSceneBuilder
         drt.anchorMin = new Vector2(0.5f, 0.5f);
         drt.anchorMax = new Vector2(0.5f, 0.5f);
         drt.pivot = new Vector2(0.5f, 0.5f);
-        drt.anchoredPosition = new Vector2(0f, -4f);
+        drt.anchoredPosition = new Vector2(0f, -28f);
         drt.sizeDelta = new Vector2(300f, 50f);
 
         Image dImg = deviceTrans.GetComponent<Image>();
@@ -458,7 +523,7 @@ public static class MainMenuSceneBuilder
             qrt.anchorMin = new Vector2(0.5f, 0.5f);
             qrt.anchorMax = new Vector2(0.5f, 0.5f);
             qrt.pivot = new Vector2(0.5f, 0.5f);
-            qrt.anchoredPosition = new Vector2(0f, -66f);
+            qrt.anchoredPosition = new Vector2(0f, -86f);
             qrt.sizeDelta = new Vector2(300f, 48f);
 
             Image qImg = quitTrans.GetComponent<Image>();
