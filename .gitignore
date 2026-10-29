@@ -113,5 +113,9 @@ InitTestScene*.unity*
 # Auto-generated cache in Assets folder
 /[Aa]ssets/[Ss]ceneDependencyCache*
 
+# Performance Test runner temporary artifacts
+/[Aa]ssets/Resources/PerformanceTestRun*
+/[Aa]ssets/Resources.meta
+
 # AI Assistant local metadata & skills
 .agent/

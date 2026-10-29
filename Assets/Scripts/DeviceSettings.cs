@@ -28,7 +28,7 @@ public static class DeviceSettings
         }
     }
 
-    public static bool IsMobile => CurrentDevice == GameDeviceType.Mobile;
+    public static bool IsMobile => Application.isMobilePlatform || CurrentDevice == GameDeviceType.Mobile;
     public static bool IsPC => CurrentDevice == GameDeviceType.PC;
 
     public static void ToggleDevice()

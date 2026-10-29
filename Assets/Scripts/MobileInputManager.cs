@@ -62,7 +62,7 @@ public class MobileInputManager : MonoBehaviour
         get
         {
             if (instance == null) return false;
-            return DeviceSettings.IsMobile;
+            return Application.isMobilePlatform || DeviceSettings.IsMobile;
         }
     }
 
@@ -320,7 +320,12 @@ public class MobileInputManager : MonoBehaviour
         {
             GameObject esGO = new GameObject("EventSystem");
             esGO.AddComponent<EventSystem>();
+#if ENABLE_INPUT_SYSTEM
+            var inputModule = esGO.AddComponent<UnityEngine.InputSystem.UI.InputSystemUIInputModule>();
+            inputModule.AssignDefaultActions();
+#else
             esGO.AddComponent<StandaloneInputModule>();
+#endif
         }
 
         Canvas canvas = GetComponentInParent<Canvas>();
