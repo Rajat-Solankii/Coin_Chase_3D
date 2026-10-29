@@ -303,7 +303,7 @@ public class SUPERCharacterAIO : MonoBehaviour{
         initialCameraFOV = playerCamera.fieldOfView;
         headbobCameraPosition = Vector3.up*standingEyeHeight;
         internalEyeHeight = standingEyeHeight;
-        if(lockAndHideMouse){
+        if(lockAndHideMouse && !DeviceSettings.IsMobile){
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
         }
@@ -423,34 +423,39 @@ public class SUPERCharacterAIO : MonoBehaviour{
         if(!controllerPaused){
         #region Input
         #if ENABLE_INPUT_SYSTEM
-            MouseXY.x = Mouse.current.delta.y.ReadValue()/50;
-            MouseXY.y = Mouse.current.delta.x.ReadValue()/50;
-            
-            mouseScrollWheel = Mouse.current.scroll.y.ReadValue()/1000;
-            if(perspectiveSwitchingKey!=Key.None)perspecTog = Keyboard.current[perspectiveSwitchingKey].wasPressedThisFrame;
-            if(interactKey!=Key.None)interactInput = Keyboard.current[interactKey].wasPressedThisFrame;
-            //movement
+            if (Mouse.current != null)
+            {
+                MouseXY.x = Mouse.current.delta.y.ReadValue()/50;
+                MouseXY.y = Mouse.current.delta.x.ReadValue()/50;
+                mouseScrollWheel = Mouse.current.scroll.y.ReadValue()/1000;
+            }
+            if (Keyboard.current != null)
+            {
+                if(perspectiveSwitchingKey!=Key.None)perspecTog = Keyboard.current[perspectiveSwitchingKey].wasPressedThisFrame;
+                if(interactKey!=Key.None)interactInput = Keyboard.current[interactKey].wasPressedThisFrame;
+                //movement
 
-             if(jumpKey!=Key.None)jumpInput_Momentary =  Keyboard.current[jumpKey].isPressed;
-             if(jumpKey!=Key.None)jumpInput_FrameOf =  Keyboard.current[jumpKey].wasPressedThisFrame;
+                 if(jumpKey!=Key.None)jumpInput_Momentary =  Keyboard.current[jumpKey].isPressed;
+                 if(jumpKey!=Key.None)jumpInput_FrameOf =  Keyboard.current[jumpKey].wasPressedThisFrame;
 
-             if(crouchKey!=Key.None){
-                crouchInput_Momentary =  Keyboard.current[crouchKey].isPressed;
-                crouchInput_FrameOf = Keyboard.current[crouchKey].wasPressedThisFrame;
-             }
-             if(sprintKey!=Key.None){
-                sprintInput_Momentary = Keyboard.current[sprintKey].isPressed;
-                sprintInput_FrameOf = Keyboard.current[sprintKey].wasPressedThisFrame;
-             }
-             if(slideKey != Key.None){
-                slideInput_Momentary = Keyboard.current[slideKey].isPressed;
-                slideInput_FrameOf = Keyboard.current[slideKey].wasPressedThisFrame;
-             }
-            #if SAIO_ENABLE_PARKOUR
-            vaultInput = Keyboard.current[VaultKey].isPressed;
-            #endif
-            MovInput.x = Keyboard.current.aKey.isPressed ? -1 : Keyboard.current.dKey.isPressed ? 1 : 0;
-            MovInput.y = Keyboard.current.wKey.isPressed ? 1 : Keyboard.current.sKey.isPressed ? -1 : 0;
+                 if(crouchKey!=Key.None){
+                    crouchInput_Momentary =  Keyboard.current[crouchKey].isPressed;
+                    crouchInput_FrameOf = Keyboard.current[crouchKey].wasPressedThisFrame;
+                 }
+                 if(sprintKey!=Key.None){
+                    sprintInput_Momentary = Keyboard.current[sprintKey].isPressed;
+                    sprintInput_FrameOf = Keyboard.current[sprintKey].wasPressedThisFrame;
+                 }
+                 if(slideKey != Key.None){
+                    slideInput_Momentary = Keyboard.current[slideKey].isPressed;
+                    slideInput_FrameOf = Keyboard.current[slideKey].wasPressedThisFrame;
+                 }
+                #if SAIO_ENABLE_PARKOUR
+                vaultInput = Keyboard.current[VaultKey].isPressed;
+                #endif
+                MovInput.x = Keyboard.current.aKey.isPressed ? -1 : Keyboard.current.dKey.isPressed ? 1 : 0;
+                MovInput.y = Keyboard.current.wKey.isPressed ? 1 : Keyboard.current.sKey.isPressed ? -1 : 0;
+            }
         #else
             //camera
             MouseXY.x = Input.GetAxis("Mouse Y");
@@ -474,6 +479,21 @@ public class SUPERCharacterAIO : MonoBehaviour{
             #endif
             MovInput = Vector2.up *Input.GetAxisRaw("Vertical") + Vector2.right * Input.GetAxisRaw("Horizontal");
         #endif
+        #endregion
+
+        #region Mobile Touch Input
+        if (DeviceSettings.IsMobile)
+        {
+            if (MobileInputManager.MoveInput.sqrMagnitude > 0.001f)
+            {
+                MovInput = MobileInputManager.MoveInput;
+            }
+            MouseXY += MobileInputManager.ConsumeLookInput();
+            if (MobileInputManager.JumpHeld) jumpInput_Momentary = true;
+            if (MobileInputManager.ConsumeJumpTriggered()) jumpInput_FrameOf = true;
+            if (MobileInputManager.SprintHeld) sprintInput_Momentary = true;
+            if (MobileInputManager.ConsumeSprintTriggered()) sprintInput_FrameOf = true;
+        }
         #endregion
 
         #region Camera

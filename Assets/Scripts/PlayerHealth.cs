@@ -16,6 +16,7 @@ public class PlayerHealth : MonoBehaviour
     {
         // Set the initial checkpoint to where the player starts
         currentCheckpointPosition = transform.position;
+        CoinThief.hasReachedCheckpoint1 = false;
     }
 
     public void UpdateCheckpoint(Vector3 newCheckpointPos)
@@ -27,6 +28,13 @@ public class PlayerHealth : MonoBehaviour
     // This function is called automatically when the player collides with a trigger
     private void OnTriggerEnter(Collider other)
     {
+        // Instant death if touching the water
+        if (other.gameObject.CompareTag("Water") || other.gameObject.name.ToLower().Contains("water") || other.gameObject.name.Contains("DeathFloor"))
+        {
+            DieInstantly();
+            return;
+        }
+
         // Make sure your hurdles have the Tag "Hurdle" in the top right of the Inspector!
         if (other.gameObject.CompareTag("Hurdle"))
         {
@@ -37,10 +45,23 @@ public class PlayerHealth : MonoBehaviour
     // If your hurdles have solid colliders instead of triggers, this will run instead
     private void OnCollisionEnter(Collision collision)
     {
+        // Instant death if touching the water
+        if (collision.gameObject.CompareTag("Water") || collision.gameObject.name.ToLower().Contains("water") || collision.gameObject.name.Contains("DeathFloor"))
+        {
+            DieInstantly();
+            return;
+        }
+
         if (collision.gameObject.CompareTag("Hurdle"))
         {
             TakeHit();
         }
+    }
+
+    public void DieInstantly()
+    {
+        currentHits = maxHits;
+        GameOver();
     }
 
     private void TakeHit()
@@ -147,8 +168,9 @@ public class PlayerHealth : MonoBehaviour
         // Give some invincibility upon respawn
         StartCoroutine(InvincibilityFrames());
         
-        // Re-lock the mouse cursor for the SUPERCharacter controller
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
+        // Re-lock the mouse cursor for the SUPERCharacter controller if not on mobile/touch simulation
+        bool keepUnlocked = DeviceSettings.IsMobile;
+        Cursor.lockState = keepUnlocked ? CursorLockMode.None : CursorLockMode.Locked;
+        Cursor.visible = keepUnlocked;
     }
 }

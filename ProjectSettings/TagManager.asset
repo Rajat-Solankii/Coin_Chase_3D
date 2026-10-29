@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 3
   tags:
   - Hurdle
+  - Water
   layers:
   - Default
   - TransparentFX
