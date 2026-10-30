@@ -1,3 +1,4 @@
+using UnityEngine.Rendering.Universal;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEditor;
@@ -107,14 +108,15 @@ public static class MainMenuSceneBuilder
         GameObject dais1 = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
         dais1.name = "Dais_Tier1";
         dais1.transform.SetParent(envRoot.transform, false);
-        dais1.transform.position = new Vector3(0f, 0.15f, 0.8f);
+        Vector3 centerOffset = new Vector3(1.5f, 0f, 0f);
+        dais1.transform.position = new Vector3(0f, 0.15f, 0.8f) + centerOffset;
         dais1.transform.localScale = new Vector3(3.2f, 0.3f, 3.2f);
         dais1.GetComponent<MeshRenderer>().sharedMaterial = stoneMat;
 
         GameObject dais2 = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
         dais2.name = "Dais_Tier2";
         dais2.transform.SetParent(envRoot.transform, false);
-        dais2.transform.position = new Vector3(0f, 0.45f, 0.8f);
+        dais2.transform.position = new Vector3(0f, 0.45f, 0.8f) + centerOffset;
         dais2.transform.localScale = new Vector3(2.4f, 0.3f, 2.4f);
         dais2.GetComponent<MeshRenderer>().sharedMaterial = stoneMat;
 
@@ -125,7 +127,7 @@ public static class MainMenuSceneBuilder
         {
             GameObject showcaseCoin = Object.Instantiate(coinFBX, envRoot.transform);
             showcaseCoin.name = "Showcase_CenterCoin";
-            showcaseCoin.transform.position = new Vector3(0f, 1.25f, 0.8f);
+            showcaseCoin.transform.position = new Vector3(0f, 1.25f, 0.8f) + centerOffset;
             showcaseCoin.transform.localScale = new Vector3(3.5f, 3.5f, 3.5f);
             if (goldMat != null)
             {
@@ -145,7 +147,7 @@ public static class MainMenuSceneBuilder
 
                 GameObject orbCoin = Object.Instantiate(coinFBX, envRoot.transform);
                 orbCoin.name = $"OrbitCoin_{i}";
-                orbCoin.transform.position = new Vector3(ox, 0.85f + (i % 2) * 0.15f, 0.8f + oz);
+                orbCoin.transform.position = new Vector3(ox, 0.85f + (i % 2) * 0.15f, 0.8f + oz) + centerOffset;
                 orbCoin.transform.localScale = new Vector3(1.8f, 1.8f, 1.8f);
                 if (goldMat != null)
                 {
@@ -192,7 +194,7 @@ public static class MainMenuSceneBuilder
         // 7. Golden Sparkle Particle Effect
         GameObject fxGO = new GameObject("GoldenSparkles");
         fxGO.transform.SetParent(envRoot.transform, false);
-        fxGO.transform.position = new Vector3(0f, 0.6f, 0.8f);
+        fxGO.transform.position = new Vector3(1.5f, 0.6f, 0.8f);
 
         var ps = fxGO.AddComponent<ParticleSystem>();
         var main = ps.main;
@@ -331,7 +333,7 @@ public static class MainMenuSceneBuilder
         cardRT.anchorMin = new Vector2(0.5f, 0.5f);
         cardRT.anchorMax = new Vector2(0.5f, 0.5f);
         cardRT.pivot = new Vector2(0.5f, 0.5f);
-        cardRT.anchoredPosition = new Vector2(0f, 0f);
+        cardRT.anchoredPosition = new Vector2(-280f, -20f);
         cardRT.sizeDelta = new Vector2(380f, 320f);
 
         Image cardImg = menuCard.GetComponent<Image>();

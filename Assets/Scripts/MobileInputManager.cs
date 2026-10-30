@@ -524,7 +524,6 @@ public class MobileInputManager : MonoBehaviour
         btnGO.transform.SetParent(parent, false);
 
         RectTransform rt = btnGO.AddComponent<RectTransform>();
-        jumpButtonRT = rt;
         rt.anchorMin = new Vector2(1f, 0f);
         rt.anchorMax = new Vector2(1f, 0f);
         rt.pivot = new Vector2(0.5f, 0.5f);
@@ -561,7 +560,6 @@ public class MobileInputManager : MonoBehaviour
         btnGO.transform.SetParent(parent, false);
 
         RectTransform rt = btnGO.AddComponent<RectTransform>();
-        jumpButtonRT = rt;
         rt.anchorMin = new Vector2(1f, 1f);
         rt.anchorMax = new Vector2(1f, 1f);
         rt.pivot = new Vector2(0.5f, 0.5f);
@@ -598,7 +596,6 @@ public class MobileInputManager : MonoBehaviour
         btnGO.transform.SetParent(parent, false);
 
         RectTransform rt = btnGO.AddComponent<RectTransform>();
-        jumpButtonRT = rt;
         rt.anchorMin = new Vector2(1f, 1f);
         rt.anchorMax = new Vector2(1f, 1f);
         rt.pivot = new Vector2(0.5f, 0.5f);
